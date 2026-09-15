@@ -108,7 +108,7 @@ HEART_CATEGORICAL_COLUMNS = [
 ]
 
 HEART_INPUT_RANGES = {
-    "age": (29, 77),
+    "age": (1, 120),
     "sex": (0, 1),
     "cp": (0, 3),
     "trestbps": (94, 200),
