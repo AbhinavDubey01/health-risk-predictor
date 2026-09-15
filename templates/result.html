@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Your Risk Assessment Result — AI Health Risk Predictor{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Risk Assessment Result</h2>
+            <p class="text-muted">
+                {% if disease == 'diabetes' %}Diabetes Risk{% else %}Heart Disease Risk{% endif %}
+                — analyzed using {{ result.model_name }}
+            </p>
+        </div>
+
+        <!-- Main result card -->
+        <div class="card result-card risk-{{ result.risk_level|lower }} p-4 p-md-5 shadow-sm border-0 rounded-4 mb-4 text-center">
+            <div class="risk-badge mb-3">
+                {% if result.risk_level == 'High' %}
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                {% elif result.risk_level == 'Moderate' %}
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                {% else %}
+                    <i class="bi bi-check-circle-fill"></i>
+                {% endif %}
+            </div>
+            <h1 class="display-4 fw-bold mb-1">{{ result.risk_level }} Risk</h1>
+            <p class="fs-5 text-muted mb-4">Estimated probability: <strong>{{ result.probability }}%</strong></p>
+
+            <!-- Risk gauge (simple progress bar) -->
+            <div class="progress risk-gauge mx-auto mb-2" role="progressbar"
+                 aria-valuenow="{{ result.probability }}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar risk-progress-{{ result.risk_level|lower }}"
+                     style="width: {{ result.probability }}%">
+                    {{ result.probability }}%
+                </div>
+            </div>
+            <div class="d-flex justify-content-between text-muted small mx-auto risk-gauge-labels">
+                <span>Low</span>
+                <span>Moderate</span>
+                <span>High</span>
+            </div>
+        </div>
+
+        <!-- Contributing factors -->
+        {% if result.top_factors %}
+        <div class="card p-4 shadow-sm border-0 rounded-4 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-list-check me-2"></i>Main Contributing Factors</h5>
+            <p class="text-muted small">
+                These are the features the model relies on most heavily overall
+                (model feature importance), shown alongside the values you entered.
+                This is not a claim of medical causation.
+            </p>
+            {% for factor in result.top_factors %}
+            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <span class="fw-semibold">{{ factor.feature }}</span>
+                <span class="text-muted">Your value: {{ factor.value }}</span>
+                <span class="badge bg-secondary">{{ (factor.importance * 100)|round(1) }}% model weight</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- General recommendations -->
+        <div class="card p-4 shadow-sm border-0 rounded-4 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-lightbulb-fill me-2"></i>General Health Suggestions</h5>
+            <ul class="mb-0">
+                <li>Maintain a balanced diet and regular physical activity.</li>
+                <li>Schedule regular check-ups with a healthcare provider.</li>
+                <li>Monitor relevant health markers periodically (glucose, blood pressure, cholesterol, etc.).</li>
+                <li>Avoid smoking and limit alcohol consumption.</li>
+                <li>Manage stress and prioritize adequate sleep.</li>
+            </ul>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="alert alert-warning d-flex align-items-start">
+            <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+            <div>{{ result.disclaimer }}</div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('assessment', disease=disease) }}" class="btn btn-outline-secondary me-2">
+                <i class="bi bi-arrow-repeat me-1"></i>Try Again
+            </a>
+            <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-house-fill me-1"></i>Back to Home
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

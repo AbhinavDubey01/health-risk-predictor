@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Data Science Dashboard — AI Health Risk Predictor{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-5">
+    <h2 class="fw-bold">Data Science Dashboard</h2>
+    <p class="text-muted">Model performance, dataset statistics, and feature importance for both disease models.</p>
+</div>
+
+{% if not diabetes_metadata and not heart_metadata %}
+<div class="alert alert-warning text-center">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    No trained models found. Run <code>python train_models.py</code> first, then reload this page.
+</div>
+{% endif %}
+
+{% for disease_label, metadata, accent in [
+    ("Diabetes", diabetes_metadata, "danger"),
+    ("Heart Disease", heart_metadata, "primary")
+] %}
+{% if metadata %}
+<div class="mb-5">
+    <h4 class="fw-bold mb-3 text-{{ accent }}">
+        <i class="bi bi-{{ 'droplet-fill' if disease_label == 'Diabetes' else 'heart-fill' }} me-2"></i>
+        {{ disease_label }} Model
+    </h4>
+
+    <!-- Stat cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card stat-card text-center p-3">
+                <div class="stat-value">{{ metadata.train_size + metadata.test_size }}</div>
+                <div class="stat-label">Total Records Used</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card text-center p-3">
+                <div class="stat-value">{{ metadata.train_size }}</div>
+                <div class="stat-label">Training Records</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card text-center p-3">
+                <div class="stat-value">{{ metadata.test_size }}</div>
+                <div class="stat-label">Test Records</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card text-center p-3">
+                <div class="stat-value">{{ (metadata.best_model_metrics.roc_auc * 100)|round(1) }}%</div>
+                <div class="stat-label">Best ROC-AUC</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Model comparison table -->
+        <div class="col-lg-7">
+            <div class="card p-4 h-100">
+                <h6 class="fw-bold mb-3">Model Comparison</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Accuracy</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1</th>
+                                <th>ROC-AUC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for model_name, m in metadata.model_comparison.items() %}
+                            <tr class="{{ 'table-success' if model_name == metadata.best_model_name else '' }}">
+                                <td>
+                                    {{ model_name }}
+                                    {% if model_name == metadata.best_model_name %}
+                                        <span class="badge bg-success ms-1">Best</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ (m.accuracy * 100)|round(1) }}%</td>
+                                <td>{{ (m.precision * 100)|round(1) }}%</td>
+                                <td>{{ (m.recall * 100)|round(1) }}%</td>
+                                <td>{{ (m.f1_score * 100)|round(1) }}%</td>
+                                <td>{{ (m.roc_auc * 100)|round(1) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-muted small mb-0">
+                    <strong>{{ metadata.best_model_name }}</strong> was automatically selected as the
+                    best model based on ROC-AUC (with F1 score as a tiebreaker).
+                </p>
+            </div>
+        </div>
+
+        <!-- Feature importance -->
+        <div class="col-lg-5">
+            <div class="card p-4 h-100">
+                <h6 class="fw-bold mb-3">Feature Importance</h6>
+                {% if metadata.feature_importance %}
+                    {% for feature, score in metadata.feature_importance.items() %}
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span>{{ feature }}</span>
+                            <span class="text-muted">{{ (score * 100)|round(1) }}%</span>
+                        </div>
+                        <div class="progress" style="height: 0.5rem;">
+                            <div class="progress-bar bg-{{ accent }}" style="width: {{ score * 100 }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted small">Feature importance is not available for this model type.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Confusion matrix -->
+    <div class="card p-4 mt-4">
+        <h6 class="fw-bold mb-3">Confusion Matrix — {{ metadata.best_model_name }}</h6>
+        {% set cm = metadata.best_model_metrics.confusion_matrix %}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <table class="table table-bordered text-center confusion-matrix-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Predicted: No</th>
+                            <th>Predicted: Yes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Actual: No</th>
+                            <td class="cm-correct">{{ cm[0][0] }}</td>
+                            <td class="cm-wrong">{{ cm[0][1] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual: Yes</th>
+                            <td class="cm-wrong">{{ cm[1][0] }}</td>
+                            <td class="cm-correct">{{ cm[1][1] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p class="text-muted small text-center mb-0">
+            Diagonal cells (green) are correct predictions; off-diagonal cells (red) are misclassifications.
+        </p>
+    </div>
+</div>
+<hr class="my-5">
+{% endif %}
+{% endfor %}
+
+{% endblock %}

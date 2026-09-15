@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}About This Project — AI Health Risk Predictor{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">About This Project</h2>
+            <p class="text-muted">AI Health Risk Predictor — Machine Learning Based Health Risk Assessment System</p>
+        </div>
+
+        <div class="card p-4 p-md-5 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-bullseye me-2"></i>Project Objective</h5>
+            <p class="mb-0">
+                This project estimates a user's statistical risk of Diabetes and Heart Disease using
+                machine learning models trained on publicly available clinical datasets. It demonstrates
+                a complete, end-to-end data science and machine learning workflow — from raw data
+                cleaning through model training, evaluation, and deployment as a usable web application.
+            </p>
+        </div>
+
+        <div class="card p-4 p-md-5 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-tools me-2"></i>Technologies Used</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul>
+                        <li>Python 3</li>
+                        <li>Flask (web framework)</li>
+                        <li>Pandas &amp; NumPy (data processing)</li>
+                        <li>Scikit-learn (machine learning)</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <ul>
+                        <li>Matplotlib, Seaborn, Plotly (visualization)</li>
+                        <li>Bootstrap 5 (frontend UI)</li>
+                        <li>Jupyter Notebook (data science workflow)</li>
+                        <li>Joblib (model persistence)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 p-md-5 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-diagram-3-fill me-2"></i>Machine Learning Algorithms Compared</h5>
+            <p>Five classification algorithms were trained and compared for each disease, with the best model automatically selected based on ROC-AUC:</p>
+            <ul class="mb-0">
+                <li>Logistic Regression</li>
+                <li>Decision Tree</li>
+                <li>Random Forest</li>
+                <li>Support Vector Machine (SVM)</li>
+                <li>Gradient Boosting</li>
+            </ul>
+        </div>
+
+        <div class="card p-4 p-md-5 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-database-fill me-2"></i>Datasets</h5>
+            <ul class="mb-0">
+                <li><strong>Diabetes:</strong> Pima Indians Diabetes Database (Kaggle) — 768 records, 8 clinical features.</li>
+                <li><strong>Heart Disease:</strong> Heart Disease Dataset (Kaggle, based on the UCI Cleveland Heart Disease dataset) — 302 unique records after deduplication, 13 clinical features.</li>
+            </ul>
+        </div>
+
+        <div class="card p-4 p-md-5 mb-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-exclamation-triangle-fill me-2"></i>Limitations</h5>
+            <ul class="mb-0">
+                <li>This is a statistical risk estimate, not a medical diagnosis.</li>
+                <li>Trained on relatively small public datasets, which limits generalizability.</li>
+                <li>The Diabetes dataset was originally collected from an adult female population.</li>
+                <li>The Heart Disease assessment requires clinical test values (ECG, fluoroscopy) that a layperson may not have without recent medical testing.</li>
+                <li>Feature importance reflects overall model behavior, not a per-user causal explanation.</li>
+            </ul>
+        </div>
+
+        <div class="alert alert-warning d-flex align-items-start">
+            <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+            <div>
+                <strong>Medical Disclaimer:</strong> This system is an educational project and is not
+                intended for medical diagnosis or treatment decisions. Always consult a qualified
+                healthcare professional for any health-related concerns.
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

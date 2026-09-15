@@ -1,0 +1,130 @@
+{
+  "disease_name": "Diabetes",
+  "best_model_name": "Gradient Boosting",
+  "feature_columns": [
+    "Pregnancies",
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI",
+    "DiabetesPedigreeFunction",
+    "Age"
+  ],
+  "train_size": 614,
+  "test_size": 154,
+  "feature_importance": {
+    "Glucose": 0.3911,
+    "BMI": 0.1964,
+    "Age": 0.1154,
+    "DiabetesPedigreeFunction": 0.1133,
+    "Insulin": 0.0823,
+    "Pregnancies": 0.0585,
+    "SkinThickness": 0.0217,
+    "BloodPressure": 0.0212
+  },
+  "model_comparison": {
+    "Logistic Regression": {
+      "accuracy": 0.7078,
+      "precision": 0.6,
+      "recall": 0.5,
+      "f1_score": 0.5455,
+      "roc_auc": 0.813,
+      "confusion_matrix": [
+        [
+          82,
+          18
+        ],
+        [
+          27,
+          27
+        ]
+      ]
+    },
+    "Decision Tree": {
+      "accuracy": 0.7468,
+      "precision": 0.7143,
+      "recall": 0.463,
+      "f1_score": 0.5618,
+      "roc_auc": 0.7905,
+      "confusion_matrix": [
+        [
+          90,
+          10
+        ],
+        [
+          29,
+          25
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 0.7468,
+      "precision": 0.6744,
+      "recall": 0.537,
+      "f1_score": 0.5979,
+      "roc_auc": 0.8122,
+      "confusion_matrix": [
+        [
+          86,
+          14
+        ],
+        [
+          25,
+          29
+        ]
+      ]
+    },
+    "Support Vector Machine": {
+      "accuracy": 0.7403,
+      "precision": 0.6522,
+      "recall": 0.5556,
+      "f1_score": 0.6,
+      "roc_auc": 0.7964,
+      "confusion_matrix": [
+        [
+          84,
+          16
+        ],
+        [
+          24,
+          30
+        ]
+      ]
+    },
+    "Gradient Boosting": {
+      "accuracy": 0.7468,
+      "precision": 0.6531,
+      "recall": 0.5926,
+      "f1_score": 0.6214,
+      "roc_auc": 0.8265,
+      "confusion_matrix": [
+        [
+          83,
+          17
+        ],
+        [
+          22,
+          32
+        ]
+      ]
+    }
+  },
+  "best_model_metrics": {
+    "accuracy": 0.7468,
+    "precision": 0.6531,
+    "recall": 0.5926,
+    "f1_score": 0.6214,
+    "roc_auc": 0.8265,
+    "confusion_matrix": [
+      [
+        83,
+        17
+      ],
+      [
+        22,
+        32
+      ]
+    ]
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "disease_name": "Heart Disease",
+  "best_model_name": "Logistic Regression",
+  "feature_columns": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "train_size": 241,
+  "test_size": 61,
+  "feature_importance": {
+    "cp": 0.9789,
+    "sex": 0.876,
+    "thalach": 0.8182,
+    "ca": 0.7401,
+    "thal": 0.5216,
+    "exang": 0.4991,
+    "oldpeak": 0.4,
+    "trestbps": 0.3587,
+    "slope": 0.3091,
+    "chol": 0.28,
+    "restecg": 0.224,
+    "fbs": 0.1124,
+    "age": 0.0879
+  },
+  "model_comparison": {
+    "Logistic Regression": {
+      "accuracy": 0.8033,
+      "precision": 0.8,
+      "recall": 0.8485,
+      "f1_score": 0.8235,
+      "roc_auc": 0.8712,
+      "confusion_matrix": [
+        [
+          21,
+          7
+        ],
+        [
+          5,
+          28
+        ]
+      ]
+    },
+    "Decision Tree": {
+      "accuracy": 0.7705,
+      "precision": 0.7879,
+      "recall": 0.7879,
+      "f1_score": 0.7879,
+      "roc_auc": 0.7695,
+      "confusion_matrix": [
+        [
+          21,
+          7
+        ],
+        [
+          7,
+          26
+        ]
+      ]
+    },
+    "Random Forest": {
+      "accuracy": 0.7705,
+      "precision": 0.7879,
+      "recall": 0.7879,
+      "f1_score": 0.7879,
+      "roc_auc": 0.868,
+      "confusion_matrix": [
+        [
+          21,
+          7
+        ],
+        [
+          7,
+          26
+        ]
+      ]
+    },
+    "Support Vector Machine": {
+      "accuracy": 0.7705,
+      "precision": 0.7714,
+      "recall": 0.8182,
+      "f1_score": 0.7941,
+      "roc_auc": 0.842,
+      "confusion_matrix": [
+        [
+          20,
+          8
+        ],
+        [
+          6,
+          27
+        ]
+      ]
+    },
+    "Gradient Boosting": {
+      "accuracy": 0.7541,
+      "precision": 0.7812,
+      "recall": 0.7576,
+      "f1_score": 0.7692,
+      "roc_auc": 0.8193,
+      "confusion_matrix": [
+        [
+          21,
+          7
+        ],
+        [
+          8,
+          25
+        ]
+      ]
+    }
+  },
+  "best_model_metrics": {
+    "accuracy": 0.8033,
+    "precision": 0.8,
+    "recall": 0.8485,
+    "f1_score": 0.8235,
+    "roc_auc": 0.8712,
+    "confusion_matrix": [
+      [
+        21,
+        7
+      ],
+      [
+        5,
+        28
+      ]
+    ]
+  }
+}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if disease == 'diabetes' %}Diabetes Risk Assessment{% else %}Heart Disease Risk Assessment{% endif %}
+    — AI Health Risk Predictor
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="text-center mb-4">
+            {% if disease == 'diabetes' %}
+                <i class="bi bi-droplet-fill fs-1 text-danger mb-2"></i>
+                <h2 class="fw-bold">Diabetes Risk Assessment</h2>
+                <p class="text-muted">Enter your health parameters below to estimate your diabetes risk.</p>
+            {% else %}
+                <i class="bi bi-heart-fill fs-1 text-primary mb-2"></i>
+                <h2 class="fw-bold">Heart Disease Risk Assessment</h2>
+                <p class="text-muted">Enter your health parameters below to estimate your heart disease risk.</p>
+            {% endif %}
+        </div>
+
+        <div class="card p-4 p-md-5 shadow-sm border-0 rounded-4">
+            <form method="POST" action="{{ url_for('predict', disease=disease) }}" id="assessmentForm" novalidate>
+
+                {% if disease == 'diabetes' %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Number of Pregnancies</label>
+                        <input type="number" step="1" class="form-control" name="Pregnancies"
+                               min="{{ input_ranges['Pregnancies'][0] }}" max="{{ input_ranges['Pregnancies'][1] }}" required>
+                        <div class="form-text">Range: {{ input_ranges['Pregnancies'][0] }}–{{ input_ranges['Pregnancies'][1] }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Glucose Level (mg/dL)</label>
+                        <input type="number" step="0.1" class="form-control" name="Glucose"
+                               min="{{ input_ranges['Glucose'][0] }}" max="{{ input_ranges['Glucose'][1] }}" required>
+                        <div class="form-text">Range: {{ input_ranges['Glucose'][0] }}–{{ input_ranges['Glucose'][1] }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Blood Pressure (mm Hg)</label>
+                        <input type="number" step="0.1" class="form-control" name="BloodPressure"
+                               min="{{ input_ranges['BloodPressure'][0] }}" max="{{ input_ranges['BloodPressure'][1] }}" required>
+                        <div class="form-text">Diastolic. Range: {{ input_ranges['BloodPressure'][0] }}–{{ input_ranges['BloodPressure'][1] }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Skin Thickness (mm)</label>
+                        <input type="number" step="0.1" class="form-control" name="SkinThickness"
+                               min="{{ input_ranges['SkinThickness'][0] }}" max="{{ input_ranges['SkinThickness'][1] }}" required>
+                        <div class="form-text">Triceps skinfold. Range: {{ input_ranges['SkinThickness'][0] }}–{{ input_ranges['SkinThickness'][1] }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Insulin (mu U/ml)</label>
+                        <input type="number" step="0.1" class="form-control" name="Insulin"
+                               min="{{ input_ranges['Insulin'][0] }}" max="{{ input_ranges['Insulin'][1] }}" required>
+                        <div class="form-text">2-hour serum insulin. Range: {{ input_ranges['Insulin'][0] }}–{{ input_ranges['Insulin'][1] }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">BMI</label>
+                        <input type="number" step="0.1" class="form-control" name="BMI"
+                               min="{{ input_ranges['BMI'][0] }}" max="{{ input_ranges['BMI'][1] }}" required>
+                        <div class="form-text">Body Mass Index. Range: {{ input_ranges['BMI'][0] }}–{{ input_ranges['BMI'][1] }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Diabetes Pedigree Function</label>
+                        <input type="number" step="0.001" class="form-control" name="DiabetesPedigreeFunction"
+                               min="{{ input_ranges['DiabetesPedigreeFunction'][0] }}" max="{{ input_ranges['DiabetesPedigreeFunction'][1] }}" required>
+                        <div class="form-text">Hereditary risk score. Range: {{ input_ranges['DiabetesPedigreeFunction'][0] }}–{{ input_ranges['DiabetesPedigreeFunction'][1] }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Age (years)</label>
+                        <input type="number" step="1" class="form-control" name="Age"
+                               min="{{ input_ranges['Age'][0] }}" max="{{ input_ranges['Age'][1] }}" required>
+                        <div class="form-text">Range: {{ input_ranges['Age'][0] }}–{{ input_ranges['Age'][1] }}</div>
+                    </div>
+                </div>
+
+                {% else %}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Age (years)</label>
+                        <input type="number" step="1" class="form-control" name="age"
+                               min="{{ input_ranges['age'][0] }}" max="{{ input_ranges['age'][1] }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Sex</label>
+                        <select class="form-select" name="sex" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Chest Pain Type</label>
+                        <select class="form-select" name="cp" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="0">Typical Angina</option>
+                            <option value="1">Atypical Angina</option>
+                            <option value="2">Non-anginal Pain</option>
+                            <option value="3">Asymptomatic</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Resting Blood Pressure (mm Hg)</label>
+                        <input type="number" step="0.1" class="form-control" name="trestbps"
+                               min="{{ input_ranges['trestbps'][0] }}" max="{{ input_ranges['trestbps'][1] }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Serum Cholesterol (mg/dl)</label>
+                        <input type="number" step="0.1" class="form-control" name="chol"
+                               min="{{ input_ranges['chol'][0] }}" max="{{ input_ranges['chol'][1] }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Fasting Blood Sugar > 120 mg/dl</label>
+                        <select class="form-select" name="fbs" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Resting ECG Results</label>
+                        <select class="form-select" name="restecg" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="0">Normal</option>
+                            <option value="1">ST-T Wave Abnormality</option>
+                            <option value="2">Left Ventricular Hypertrophy</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Max Heart Rate Achieved</label>
+                        <input type="number" step="0.1" class="form-control" name="thalach"
+                               min="{{ input_ranges['thalach'][0] }}" max="{{ input_ranges['thalach'][1] }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Exercise-Induced Angina</label>
+                        <select class="form-select" name="exang" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">ST Depression (oldpeak)</label>
+                        <input type="number" step="0.1" class="form-control" name="oldpeak"
+                               min="{{ input_ranges['oldpeak'][0] }}" max="{{ input_ranges['oldpeak'][1] }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Slope of Peak Exercise ST Segment</label>
+                        <select class="form-select" name="slope" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="0">Upsloping</option>
+                            <option value="1">Flat</option>
+                            <option value="2">Downsloping</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Major Vessels Colored (0–4)</label>
+                        <select class="form-select" name="ca" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Thalassemia Result</label>
+                        <select class="form-select" name="thal" required>
+                            <option value="" disabled selected>Select...</option>
+                            <option value="0">Unknown</option>
+                            <option value="1">Fixed Defect</option>
+                            <option value="2">Normal</option>
+                            <option value="3">Reversible Defect</option>
+                        </select>
+                    </div>
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-lg w-100 mt-4 submit-btn" id="submitBtn">
+                    <span id="submitBtnText"><i class="bi bi-graph-up-arrow me-2"></i>Get Risk Assessment</span>
+                    <span id="submitBtnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                </button>
+
+            </form>
+        </div>
+
+        <p class="text-center text-muted small mt-3">
+            <i class="bi bi-shield-lock me-1"></i>
+            Your data is processed locally and is not stored or sent to any external service.
+        </p>
+
+    </div>
+</div>
+
+{% endblock %}
+

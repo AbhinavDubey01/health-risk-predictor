@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Home — AI Health Risk Predictor{% endblock %}
+
+{% block content %}
+
+<!-- Hero section -->
+<div class="hero-section text-center rounded-4 p-5 mb-5">
+    <i class="bi bi-heart-pulse display-3 mb-3"></i>
+    <h1 class="display-5 fw-bold mb-3">AI Health Risk Predictor</h1>
+    <p class="lead mb-4">
+        A machine learning based system that estimates your risk of Diabetes and
+        Heart Disease using proven classification algorithms trained on public,
+        real-world clinical datasets.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('assessment', disease='diabetes') }}" class="btn btn-light btn-lg px-4">
+            <i class="bi bi-droplet-fill me-2"></i>Check Diabetes Risk
+        </a>
+        <a href="{{ url_for('assessment', disease='heart') }}" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-heart-fill me-2"></i>Check Heart Disease Risk
+        </a>
+    </div>
+</div>
+
+<!-- Disclaimer banner -->
+<div class="alert alert-warning d-flex align-items-center mb-5" role="alert">
+    <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+    <div>
+        <strong>Educational tool only.</strong> This system provides a statistical
+        risk estimate based on machine learning models trained on public datasets.
+        It is <strong>not</strong> a medical diagnosis. Please consult a qualified
+        healthcare professional for any health concerns.
+    </div>
+</div>
+
+<!-- Feature cards -->
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card feature-card h-100 text-center p-4">
+            <i class="bi bi-cpu-fill fs-1 text-primary mb-3"></i>
+            <h5 class="fw-bold">Machine Learning Powered</h5>
+            <p class="text-muted mb-0">
+                Compares five classification algorithms — Logistic Regression, Decision
+                Tree, Random Forest, SVM, and Gradient Boosting — and automatically
+                selects the best performer for each disease.
+            </p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card h-100 text-center p-4">
+            <i class="bi bi-bar-chart-fill fs-1 text-primary mb-3"></i>
+            <h5 class="fw-bold">Transparent Results</h5>
+            <p class="text-muted mb-0">
+                Every prediction includes a probability score, a risk level, and the
+                top contributing factors — not just a single black-box label.
+            </p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card h-100 text-center p-4">
+            <i class="bi bi-shield-check fs-1 text-primary mb-3"></i>
+            <h5 class="fw-bold">Privacy Respecting</h5>
+            <p class="text-muted mb-0">
+                No accounts, no stored personal health data, no external API calls.
+                Everything runs locally on this application.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Two disease cards -->
+<h3 class="fw-bold mb-4 text-center">Choose an Assessment</h3>
+<div class="row g-4 justify-content-center">
+    <div class="col-md-5">
+        <div class="card disease-card h-100 p-4">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-droplet-fill fs-1 text-danger me-3"></i>
+                <h4 class="fw-bold mb-0">Diabetes Risk</h4>
+            </div>
+            <p class="text-muted">
+                Estimate your risk based on glucose level, BMI, blood pressure, age,
+                and other clinical indicators.
+            </p>
+            <a href="{{ url_for('assessment', disease='diabetes') }}" class="btn btn-danger mt-auto">
+                Start Assessment <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card disease-card h-100 p-4">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-heart-fill fs-1 text-primary me-3"></i>
+                <h4 class="fw-bold mb-0">Heart Disease Risk</h4>
+            </div>
+            <p class="text-muted">
+                Estimate your risk based on chest pain type, cholesterol, resting
+                blood pressure, max heart rate, and other cardiac indicators.
+            </p>
+            <a href="{{ url_for('assessment', disease='heart') }}" class="btn btn-primary mt-auto">
+                Start Assessment <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
