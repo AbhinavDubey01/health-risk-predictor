@@ -76,6 +76,9 @@ def clean_heart_data(df: pd.DataFrame) -> pd.DataFrame:
     """
     cleaned_df = df.copy()
     cleaned_df = cleaned_df.drop_duplicates().reset_index(drop=True)
+        # In this Kaggle file the label is reversed: 1 = no disease, 0 = disease.
+    # Flip it so 1 always means disease present.
+    cleaned_df[config.HEART_TARGET_COLUMN] = 1 - cleaned_df[config.HEART_TARGET_COLUMN]
     return cleaned_df
 
 
